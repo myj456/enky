@@ -18,6 +18,7 @@ import java.util.Iterator;
 // 로그인 요청 처리
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
+    // 로그인 요청을 받는 최상위 관리자. -> 로그인 인증 여부만 확인
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
@@ -37,7 +38,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password, null);
 
         // token 검증을 위한 AuthenticationManager
-        // CustomuserDetailService.loadUserByUsername() 호출됨.
+        // CustomuserDetailService.loadUserByUsername() 호출됨. -> DaoAuthenticationProvider이 해당 값을 통해 인증을 하기위해서
         return authenticationManager.authenticate(authenticationToken);
     }
 

@@ -70,6 +70,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // securitycontextholder에 authToken을 전달하여 security 사용자를 등록함.
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
+        // 컨트롤러 호출
         filterChain.doFilter(request, response);
     }
 }

@@ -19,7 +19,7 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
-        // role을 grantedAuthority로 변환
+        // role을 grantedAuthority(Security 권한 표현 인터페이스)로 변환
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
@@ -60,7 +60,7 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    // 계정 활성화 ㅂ
+    // 계정 활성화
     @Override
     public boolean isEnabled() {
         return true;
