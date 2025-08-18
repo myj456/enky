@@ -22,9 +22,9 @@ public class JwtFilter extends OncePerRequestFilter {
     // jwt 토큰 인증
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("=== JWT Filter Start ===");
-        System.out.println("Request URI: " + request.getRequestURI());
-        System.out.println("Request Method: " + request.getMethod());
+//        System.out.println("=== JWT Filter Start ===");
+//        System.out.println("Request URI: " + request.getRequestURI());
+//        System.out.println("Request Method: " + request.getMethod());
 
 
         // request에서 Authorization 헤더를 가져옴.
@@ -52,7 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = jwtUtil.getUsername(token);
         String role = jwtUtil.getRole(token);
 
-        System.out.println("Token Valid - Username: " + username + ", Role: " + role);
+//        System.out.println("Token Valid - Username: " + username + ", Role: " + role);
 
         User user = new User();
         user.setUsername(username);
