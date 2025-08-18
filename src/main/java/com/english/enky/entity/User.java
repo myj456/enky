@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor // 모든 필드를 매개변수로 하는 생성자
+@NoArgsConstructor // 기본 생성자
 @Table(name = "users")
 public class User {
     @Id

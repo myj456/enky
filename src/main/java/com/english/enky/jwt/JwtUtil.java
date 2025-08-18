@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-// jwt 토큰
+// jwt 토큰의 전체 생명주기를 관리
 @Component
 public class JwtUtil {
 
@@ -17,7 +17,7 @@ public class JwtUtil {
 
     // jwt 키를 불러옴.
     public JwtUtil(@Value("${spring.jwt.secret}") String secret){
-        // 키를 객체 타입으로 저장하여 암호화(HS256)를 함.
+        // 키를 객체 타입으로 저장하여 초기화(HS256)를 함. => 암호화하기 위해서.
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm());
     }
@@ -43,9 +43,8 @@ public class JwtUtil {
                 .getPayload().getExpiration().before(new Date());
     }
 
-    // 토큰 재생성
+    // 토큰 생성
     public String createJWT(String username, String role, Long expiredMS){
-        // builder를 통해서 토큰 만들기
         return Jwts.builder()
                 // claim을 통해 특정값을 넣을 수 있음.
                 .claim("username", username)

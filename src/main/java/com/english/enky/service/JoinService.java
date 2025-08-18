@@ -15,11 +15,13 @@ public class JoinService {
 
     private final UserRepository userRepository;
 
+    // 회원가입 처리
     public void joinProcess(JoinDto joinDto){
         String username = joinDto.getUsername();
         String password = joinDto.getPassword();
         String nickname = joinDto.getNickname();
 
+        // 중복 검사
         Boolean isExistUn = userRepository.existsByUsername(username);
         Boolean isExistNn = userRepository.existsByNickname(nickname);
 
@@ -30,6 +32,7 @@ public class JoinService {
             return;
         }
 
+        // 새로운 사용자 엔티티 생성
         User user = new User();
 
         user.setUsername(username);
@@ -37,6 +40,7 @@ public class JoinService {
         user.setNickname(nickname);
         user.setRole("ROLE_ADMIN");
 
+        // 사용자 정보 저장
         userRepository.save(user);
     }
 }

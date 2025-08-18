@@ -20,12 +20,17 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
 
+/*
+* Security, jwt 보안 설정
+* */
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtUtil jwtUtil;
 
+    // 사용자 인증 처리 컴포넌트 빈 등록
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
@@ -37,11 +42,15 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /* filter Chanin 설정
+    HTTP 요청에 대한 보안 정책과 인증/인가 규칙을 정의
+    * */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        // csrf 비활성화
+
+        // HTTP 요청 설정
         http
-                .csrf(AbstractHttpConfigurer::disable) // csrf
+                .csrf(AbstractHttpConfigurer::disable) // csrf 비활성화 => session statless이기 때문. 인증 정보를 보관 X
                 .formLogin(AbstractHttpConfigurer::disable) // 폼 로그인 방식
                 .httpBasic(AbstractHttpConfigurer::disable) // http basic 인증 방식
                 .authorizeHttpRequests((auth) -> auth
@@ -52,13 +61,16 @@ public class SecurityConfig {
         // 세션 설정
         http
                 .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // jwt에선 session을 STATELESS로 관리함.
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // jwt에선 session을 STATELESS로 관리함. => 토큰에 인증 정보가 모두 담겨 있기 때문.
 
-        // 메서드 등록
+        // 커스텀 필터 등록
+        // 모든 요청을 jwt로 확인하기 위해서.
         http
                 // LoginFilter 등록
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                // JwtFilter 등록
+                // LoginFilter 이전에 JwtFilter 등록
+                // 필터 순서 : jwt -> login -> security
+                // addFilterBefore은 특정 필터 앞에 새로운 필터를 추가하는 메서드임.
                 .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
 
         // cors 설정
@@ -75,12 +87,12 @@ public class SecurityConfig {
                                 configuration.setAllowedMethods(Collections.singletonList("*"));
                                 // Credential (프론트) 허용 여부
                                 configuration.setAllowCredentials(true);
-                                // 허용할 헤더 내용 설정
+                                // 응답 헤더 설정
                                 configuration.setAllowedHeaders(Collections.singletonList("*"));
                                 // 허용되는 시간 설정
                                 configuration.setMaxAge(3600L);
 
-                                // 프론트가 헤더를 보낼 허용할 헤더 내용
+                                // 클라이언트가 접근할 수 있는 응답 헤더 설정
                                 configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
                                 return configuration;

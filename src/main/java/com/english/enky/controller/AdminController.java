@@ -14,6 +14,11 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String mainP(){ // GET 루트 요청
+
+        /*
+            SecurityContext에서 사용자 정보 추출
+         */
+
         // 세션 현재 사용자 아이디
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 

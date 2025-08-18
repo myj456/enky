@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+// 로그인한 사용자 정보를 조회 서비스
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -16,9 +17,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        // 유저 데이터 가져오기
+        // username을 통해서 유저 정보를 조회함.
         User user = userRepository.findByUsername(username);
 
+        // 사용자 존재 여부 확인 후 정보 반환
         if(user != null){
             return new CustomUserDetails(user);
         }
