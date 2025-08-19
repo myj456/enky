@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable) // 폼 로그인 방식
                 .httpBasic(AbstractHttpConfigurer::disable) // http basic 인증 방식
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/join").permitAll() // 경로 인가 적용
+                        .requestMatchers("/login", "/join").permitAll() // 경로 인가 적용
                         .requestMatchers("/admin").hasAnyRole("ADMIN") // 해당 경로에 USER 권한을 가진 유저만 접근 가능.
                         .anyRequest().authenticated());
 

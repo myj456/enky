@@ -63,7 +63,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 //        System.out.println("Generating token for - Username: " + username + ", Role: " + role);
 
         // 토큰 발급
-        String token = jwtUtil.createJWT(username, role, 60*60*10*1000L);
+        String token = jwtUtil.createJWT(username, role, 60*60*10*100L);
 
 //        System.out.println("Generated Token (first 50 chars): " + token.substring(0, Math.min(token.length(), 50)) + "...");
 
